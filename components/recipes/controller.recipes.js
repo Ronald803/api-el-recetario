@@ -7,18 +7,40 @@ function addRecipe(name,image,punctuation,favorite,time,difficulty,recommended,c
                 name,image,punctuation,favorite,time,difficulty,recommended,category,ingredients,process,autor
             }
         const recipeSaved = await storeRecipe.add(recipe)
-        resolve(recipeSaved)
+        resolve({
+            autor: recipeSaved.autor,
+            _id: recipeSaved._id
+        })
     })
 }
 
-function getRecipes(filter){
+function getRecipes(filter,queries){
     return new Promise(async(resolve,reject)=>{
         const recipes = await storeRecipe.list(filter);
-        resolve(recipes)
+        let recipesFiltered = filterArray(recipes,queries.type);
+        recipesFiltered=filterArray(recipesFiltered,queries.comida)
+        resolve(recipesFiltered)
     })
+}
+
+const filterArray = (array,parameter)=>{
+    let arrayFiltered=[];
+    if(parameter){
+        array.map(recipe=>{
+            recipe.category.map(cat=>{
+                if(cat===parameter){
+                    arrayFiltered.push(recipe)
+                }
+            })
+        })
+    }else{
+        arrayFiltered = [...array];
+    }
+    return arrayFiltered;
 }
 
 module.exports = {
     addRecipe,
     getRecipes
 }
+

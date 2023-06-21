@@ -14,17 +14,3 @@ async function list(filter){
 module.exports = {
     add,list
 }
-//_________________ Example __________________
-// recipes:  [
-//     {   id:1,
-//         name: "Piquemacho",
-//         image: "/img/carousel/platillos-principales.jpg",
-//         punctuation: 7,
-//         favorite: false,
-//         time: 2,
-//         difficulty : 10,
-//         recommended : true,
-//         category: ["Comida típica", "Platillos principales"],
-//         ingredients : ["cebolla", "carne", "salchicha", "papas"],
-//         process : ["Cortar todos los ingredientes", "Freir los ingredientes", "Servir"]
-//     },

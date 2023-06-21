@@ -5,7 +5,8 @@ const responsePattern   = require('../../network/responsePattern');
 const {validateJWT}     = require('../../middlewares/validateJWT');
 
 router.get('/',(req,res)=>{
-    controllerRecipes.getRecipes(req.body)
+    const queries = req.query;
+    controllerRecipes.getRecipes(req.body,queries)
         .then(recipes=>{
             responsePattern.success(req,res,recipes.length,recipes,200);
         })

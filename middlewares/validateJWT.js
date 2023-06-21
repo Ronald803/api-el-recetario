@@ -20,7 +20,7 @@ const validateJWT = (rolArray)=>{
                 }
             }
             let permission = false;
-            if(rolArray){
+            if(rolArray.length>0){
                 rolArray.map(rol=>{
                     if(rol===user.rol){
                         permission=true;
