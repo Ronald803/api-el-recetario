@@ -3,7 +3,6 @@ const jwt           = require('jsonwebtoken');
 const storeUser     = require('../users/store.users');
 
 function login(email,password){
-    console.log("controller auth");
     return new Promise( async(resolve,reject)=>{
         if(!email || !password){return reject('Incomplete Data')};
         // _____________________ Checking if email exists _____________
@@ -16,8 +15,11 @@ function login(email,password){
         const payload   = {uid: user[0]._id};
         const token     = jwt.sign(payload,process.env.SECRETORPRIVATEKEY,{expiresIn:'4h'});
         resolve({
+            id: user[0]._id,
             name: user[0].name,
             rol: user[0].rol,
+            email: user[0].email,
+            favorites: user[0].favorites,
             token
         })
     } )

@@ -46,9 +46,12 @@
 {
 	"message": "Loggeado correctamente",
 	"body": {
+		"id": "649089301288a90a4765eea6",
 		"name": "Nestor Chambi Chinche",
 		"rol": "user",
-		"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NDkwODkzMDEyODhhOTBhNDc2NWVlYTYiLCJpYXQiOjE2ODcyMDMxNTUsImV4cCI6MTY4NzIxNzU1NX0.T3J4pUzfXnN3Wv-L00SuixZM3EZ6NA4f6IWvr_M4ryA"
+		"email": "nestor@gmail.com",
+		"favorites": [],
+		"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NDkwODkzMDEyODhhOTBhNDc2NWVlYTYiLCJpYXQiOjE2ODgwMTAxNDIsImV4cCI6MTY4ODAyNDU0Mn0.iiJsUdw573iPTwfftWRHxPlG4Qx6qFMfra4bc1XZGLA"
 	}
 }
 ```
