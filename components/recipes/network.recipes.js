@@ -15,13 +15,22 @@ router.get('/',(req,res)=>{
         })
 })
 
-
 router.post('/',validateJWT([]),(req,res)=>{
-    const {name,image,punctuation,favorite,time,difficulty,recommended,category,ingredients,process} = req.body
+    const {name,image,favorite,time,difficulty,recommended,category,ingredients,process} = req.body
     const autor = req.user.name;
-    controllerRecipes.addRecipe(name,image,punctuation,favorite,time,difficulty,recommended,category,ingredients,process,autor)
+    controllerRecipes.addRecipe(name,image,favorite,time,difficulty,recommended,category,ingredients,process,autor)
         .then(newRecipe=>{
             responsePattern.success(req,res,'Receta añadida correctamente',newRecipe,201)
+        })
+        .catch(e=>{
+            responsePattern.error(req,res,400,e)
+        })
+})
+
+router.put('/',validateJWT([]),(req,res)=>{
+    controllerRecipes.likeRecipe(req.query)
+        .then(answer=>{
+            responsePattern.success(req,res,'Le diste like a la receta exitosamente',answer,201)
         })
         .catch(e=>{
             responsePattern.error(req,res,400,e)

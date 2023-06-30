@@ -11,12 +11,8 @@ const mySchema = new Schema({
         type: String,
         required: true
     },
-    punctuation:{
-        type: Number,
-        required: true
-    },
     favorite:{
-        type: Boolean,
+        type: Number,
         required: true
     },
     time:{
