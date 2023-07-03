@@ -12,6 +12,7 @@ function addUser(name,email,password){
             name, email, 
             password: encryptPassword, 
             favorites:[],
+            recommended: [],
             rol: 'user'
         }
         // _________________________ saving in data base ____________

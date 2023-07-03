@@ -22,6 +22,10 @@ const mySchena = new Schema({
     favorites:{
         type: Array,
         required: true
+    },
+    recommended: {
+        type: Array,
+        required: true
     }
 })
 

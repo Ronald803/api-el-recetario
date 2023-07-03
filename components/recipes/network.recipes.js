@@ -28,9 +28,9 @@ router.post('/',validateJWT([]),(req,res)=>{
 })
 
 router.put('/',validateJWT([]),(req,res)=>{
-    controllerRecipes.likeRecipe(req.query)
+    controllerRecipes.likeRecipe(req.query,req.user)
         .then(answer=>{
-            responsePattern.success(req,res,'Le diste like a la receta exitosamente',answer,201)
+            responsePattern.success(req,res,`Le diste ${req.query.action} a la receta exitosamente`,answer,201)
         })
         .catch(e=>{
             responsePattern.error(req,res,400,e)

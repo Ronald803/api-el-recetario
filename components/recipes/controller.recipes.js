@@ -1,5 +1,5 @@
 const storeRecipe       = require('./store.recipes');
-
+const storeUser        = require('../users/store.users')
 function addRecipe(name,image,favorite,time,difficulty,recommended,category,ingredients,process,autor){
     return new Promise(async(resolve,reject)=>{
         const recipe =
@@ -23,10 +23,58 @@ function getRecipes(filter,queries){
     })
 }
 
-function likeRecipe(queries){
-    console.log({queries});
+function likeRecipe(queries,user){
     return new Promise(async(resolve,reject)=>{
-        resolve("Petición put a recipe")
+        try {
+        // _________________ Verify that the recipe exists _______________________________
+            const recipe = await storeRecipe.list({_id: queries.id})
+            if(recipe.length===0){return reject("Esa receta no existe")}                
+        
+        //__________________ Verify if the user has already liked the recipe _____________
+        let alreadyLikedRecipe = false;
+        let alreadyRecommendedRecipe = false;
+        user.favorites.map(idRecipe=>{
+            if(idRecipe == queries.id){alreadyLikedRecipe = true}
+        })
+        user.recommended.map(idRecipe=>{
+            if(idRecipe == queries.id){alreadyRecommendedRecipe = true}
+        })
+
+        if(queries.action === 'like'){
+            if(alreadyLikedRecipe){return reject(`${user.name} ya le dió like a ${recipe[0].name}`)}
+            //__________________ Save the id recipe in the users favorites object ____________
+            const updatedUser = await storeUser.iLikeThisRecipe(user._id,queries.id);
+            //__________________ Increase number of favorite in recipe object ________________
+            const updatedRecipe = await storeRecipe.increaseFavorite(queries.id,1);    
+            return resolve(updatedRecipe);
+        } else if (queries.action === 'dislike'){
+            if(!alreadyLikedRecipe){return reject(`${user.name} no le dió like a ${recipe[0].name}, por lo que no se le puede quitar el like`)};
+            // _________________ Delete the id recipe of the users favorites objects _________
+            const updatedUser = await storeUser.iDislikeThisRecipe(user._id,queries.id);
+            // _________________ Decrease number of favorite in recipe object ________________
+            const updatedRecipe = await storeRecipe.increaseFavorite(queries.id,-1);
+            return resolve(updatedRecipe)
+        } else if (queries.action === 'recommend') {
+            if(alreadyRecommendedRecipe){return reject(`${user.name} ya recomendó ${recipe[0].name}`)}
+            // _________________ Users only can recommend three recipes ______________________
+            if(user.recommended.length === 3){return reject(`${user.name} ya recomendó 3 recetas`)}
+            // _________________ Save the id recipe in the users recommended object __________
+            const updatedUser = await storeUser.recommendRecipe(user._id,queries.id);
+            // _________________ Increase the number of recommended in recipe object _________
+            const updatedRecipe = await storeRecipe.increaseRecommended(queries.id,1);
+            return resolve(updatedRecipe);            
+        } else if (queries.action === 'undoRecommend') {
+            if(!alreadyRecommendedRecipe){return reject(`${user.name} no recomendó ${recipe[0].name }, por lo que no se puede quitar de recomendados`)}
+            // _________________ Delete the id recipe of the users recommended object ________
+            const updatedUser = await storeUser.undoRecommendRecipe(user._id,queries.id);
+            // _________________ Decrease number of recommended recipes object _______________
+            const updatedRecipe = await storeRecipe.increaseRecommended(queries.id,-1);
+            return resolve(updatedRecipe);
+        }
+        return reject(`La acción ${queries.action} es incorrecta`)
+        } catch (error) {
+            return reject('Revisa el id de la receta');
+        }
     })
 }
 
