@@ -78,6 +78,40 @@ function likeRecipe(queries,user){
     })
 }
 
+function getFavoriteRecipes(){
+    const max = 10;
+    return new Promise(async(resolve,reject)=>{
+        const recipes = await storeRecipe.list();
+        // ___________________ Filter the recipes that has at least one point in "favorite" ______________________
+        let moreThanOnePointFavoriteRecipe = recipes.filter(recipe=>{
+            return recipe.favorite > 0
+        })
+        moreThanOnePointFavoriteRecipe = moreThanOnePointFavoriteRecipe.sort((a,b)=>{
+            return b.favorite - a.favorite
+        })
+        if(moreThanOnePointFavoriteRecipe.length<=max){
+            return resolve(moreThanOnePointFavoriteRecipe)
+        } else if(moreThanOnePointFavoriteRecipe.length>max){
+            let justMaxFavoriteRecipes = [];
+            console.log("aadf");
+            for(let i=0 ; i<max ; i++){
+                justMaxFavoriteRecipes.push(moreThanOnePointFavoriteRecipe[i])
+            }
+            return resolve(justMaxFavoriteRecipes)
+        }
+    })
+}
+
+function getRecommendedRecipes(){
+    return new Promise(async(resolve,reject)=>{
+        const recipes = await storeRecipe.list();
+        // ____________________ Filter the recipes that has been recommended at least one time ______________________
+        let recommendedRecipes = recipes.filter(recipe=>{
+            return recipe.recommended > 0
+        })
+        resolve (recommendedRecipes)
+    })
+}
 const filterArray = (array,parameter)=>{
     let arrayFiltered=[];
     if(parameter){
@@ -97,6 +131,8 @@ const filterArray = (array,parameter)=>{
 module.exports = {
     addRecipe,
     getRecipes,
-    likeRecipe
+    likeRecipe,
+    getFavoriteRecipes,
+    getRecommendedRecipes
 }
 

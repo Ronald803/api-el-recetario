@@ -4,6 +4,24 @@ const controllerRecipes = require('./controller.recipes');
 const responsePattern   = require('../../network/responsePattern');
 const {validateJWT}     = require('../../middlewares/validateJWT');
 
+router.get('/favorites',(req,res)=>{
+    controllerRecipes.getFavoriteRecipes()
+        .then(favoriteRecipes=>{
+            responsePattern.success(req,res,`Estas son las ${favoriteRecipes.length} recetas favoritas`,favoriteRecipes,200);
+        })
+        .catch(e=>{
+            responsePattern.error(req,res,400,e);
+        })
+})
+router.get('/recommended',(req,res)=>{
+    controllerRecipes.getRecommendedRecipes()
+        .then(recommendedRecipes=>{
+            responsePattern.success(req,res,recommendedRecipes.length,recommendedRecipes,200)
+        })
+        .catch(e=>{
+            responsePattern.error(req,res,400,e);
+        })
+})
 router.get('/',(req,res)=>{
     const queries = req.query;
     controllerRecipes.getRecipes(req.body,queries)
