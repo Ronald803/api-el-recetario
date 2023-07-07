@@ -15,11 +15,9 @@ function login(email,password){
         const payload   = {uid: user[0]._id};
         const token     = jwt.sign(payload,process.env.SECRETORPRIVATEKEY,{expiresIn:'4h'});
         resolve({
-            id: user[0]._id,
             name: user[0].name,
+            id: user[0]._id,
             rol: user[0].rol,
-            email: user[0].email,
-            favorites: user[0].favorites,
             token
         })
     } )

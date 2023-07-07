@@ -17,9 +17,13 @@ function addRecipe(name,image,favorite,time,difficulty,recommended,category,ingr
 function getRecipes(filter,queries){
     return new Promise(async(resolve,reject)=>{
         const recipes = await storeRecipe.list(filter);
-        let recipesFiltered = filterArray(recipes,queries.type);
-        recipesFiltered=filterArray(recipesFiltered,queries.comida)
-        resolve(recipesFiltered)
+        if(queries){
+            let recipesFiltered = filterArray(recipes,queries.type);
+            recipesFiltered=filterArray(recipesFiltered,queries.comida)
+            return resolve(recipesFiltered)
+        } else {
+            return resolve(recipes)
+        }        
     })
 }
 

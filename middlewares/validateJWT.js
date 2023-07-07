@@ -6,6 +6,8 @@ const responsePattern   = require('../network/responsePattern');
 const validateJWT = (rolArray)=>{
     return async (req=request,res=response,next)=>{
         const token = req.header('xtoken')
+        console.log("desde validatejwt");
+        console.log({token});
         try {
             if(!token && rolArray[0]=='everybody'){return next()}
             if(!token){

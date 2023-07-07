@@ -1,7 +1,19 @@
-const express       = require('express');
-const router        = express.Router();
-const controllerUser= require('./controller.users');
-const responsePattern      = require('../../network/responsePattern');
+const express           = require('express');
+const router            = express.Router();
+const controllerUser    = require('./controller.users');
+const responsePattern   = require('../../network/responsePattern');
+const {validateJWT}     = require('../../middlewares/validateJWT');
+
+router.get('/favorites',validateJWT([]),(req,res)=>{
+    const idUser = req.user._id;
+    controllerUser.getFavoritesUser(idUser)
+        .then(userFavorites=>{
+            responsePattern.success(req,res,`Estos son los favoritos de ${req.user.name}`,userFavorites,201)
+        })
+        .catch(e=>{
+            responsePattern.error(req,res,400,e)
+        })
+})
 
 router.get('/',(req,res)=>{
     controllerUser.getUser()
@@ -22,6 +34,8 @@ router.post('/',(req,res)=>{
             responsePattern.error(req,res,400,e)
         })
 })
+
+
 
 module.exports = router;
 

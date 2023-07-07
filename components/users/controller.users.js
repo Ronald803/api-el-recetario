@@ -4,6 +4,10 @@ const jwt               = require('jsonwebtoken')
 
 function addUser(name,email,password){
     return new Promise(async(resolve,reject)=>{
+        if(!name || !email || !password){ return reject('Información incompleta')};
+        // ________________ checking if the email has not been used already _________
+        const userFound = await storeUsers.list({email});
+        if(userFound.length>0){return reject('Solicitud denegada')}
         // _________________________ encrypting password _____________
         const salt = bcryptjs.genSaltSync();
         const encryptPassword = bcryptjs.hashSync(password,salt);
@@ -34,8 +38,16 @@ function getUser(){
         resolve(usersFound)
     })
 }
-
+function getFavoritesUser(id){
+    return new Promise(async (resolve,reject)=>{
+        const userFound = await storeUsers.list({_id: id})
+        resolve({
+            favorites: userFound[0].favorites
+        });
+    }) 
+}
 module.exports = {
     addUser,
-    getUser
+    getUser,
+    getFavoritesUser
 }
