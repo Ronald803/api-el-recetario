@@ -22,6 +22,16 @@ router.get('/recommended',(req,res)=>{
             responsePattern.error(req,res,400,e);
         })
 })
+router.get('/:id',(req,res)=>{
+    const id = req.params.id;
+    controllerRecipes.getRecipes({_id:id})
+        .then(recipe=>{
+            responsePattern.success(req,res,recipe.length,recipe,200);
+        })
+        .catch(e=>{
+            responsePattern.error(req,res,400,e)
+        })
+})
 router.get('/',(req,res)=>{
     const queries = req.query;
     controllerRecipes.getRecipes(req.body,queries)
