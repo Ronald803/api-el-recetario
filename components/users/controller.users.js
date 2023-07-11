@@ -1,6 +1,7 @@
 const storeUsers        = require('./store.users');
 const bcryptjs          = require('bcryptjs');
 const jwt               = require('jsonwebtoken')
+const storeRecipes      = require('../recipes/store.recipes');
 
 function addUser(name,email,password){
     return new Promise(async(resolve,reject)=>{
@@ -38,16 +39,8 @@ function getUser(){
         resolve(usersFound)
     })
 }
-function getFavoritesUser(id){
-    return new Promise(async (resolve,reject)=>{
-        const userFound = await storeUsers.list({_id: id})
-        resolve({
-            favorites: userFound[0].favorites
-        });
-    }) 
-}
+
 module.exports = {
     addUser,
     getUser,
-    getFavoritesUser
 }

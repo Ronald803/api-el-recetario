@@ -6,15 +6,13 @@ const responsePattern   = require('../network/responsePattern');
 const validateJWT = (rolArray)=>{
     return async (req=request,res=response,next)=>{
         const token = req.header('xtoken')
-        console.log("desde validatejwt");
-        console.log({token});
         try {
             if(!token && rolArray[0]=='everybody'){return next()}
             if(!token){
                 return responsePattern.error(req,res,400,'There is no token');
             };
             const {uid} = jwt.verify(token, process.env.SECRETORPRIVATEKEY);
-            const user = await ModelUser.findById(uid);
+            const user = await ModelUser.findById(uid); 
             if(rolArray){
                 if(rolArray[0]=='everybody'){
                     req.user = user;
