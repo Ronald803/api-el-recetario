@@ -3,6 +3,8 @@ const router            = express.Router();
 const controllerRecipes = require('./controller.recipes');
 const responsePattern   = require('../../network/responsePattern');
 const {validateJWT}     = require('../../middlewares/validateJWT');
+const multer            = require('multer');
+const upload = multer();
 
 router.get('/favorites',(req,res)=>{
     controllerRecipes.getFavoriteRecipes()
@@ -43,16 +45,24 @@ router.get('/',(req,res)=>{
         })
 })
 
-router.post('/',validateJWT([]),(req,res)=>{
-    const {name,image,favorite,time,difficulty,recommended,category,ingredients,process} = req.body
-    const autor = req.user.name;
-    controllerRecipes.addRecipe(name,image,favorite,time,difficulty,recommended,category,ingredients,process,autor)
-        .then(newRecipe=>{
-            responsePattern.success(req,res,'Receta añadida correctamente',newRecipe,201)
-        })
-        .catch(e=>{
-            responsePattern.error(req,res,400,e)
-        })
+router.post('/',validateJWT([]),upload.any(),(req,res)=>{
+    const {body,files} = req;
+    console.log(body);
+    const {category} = body;
+    console.log({category});
+    console.log(files);
+    console.log("______________________________________________________")
+    responsePattern.success(req,res,"lalala",{message: "mmmmm"},201);
+    //const {name,favorite,time,difficulty,recommended,category,ingredients,process} = req.body
+    //const autor = req.user.name;
+    //console.log({autor})
+    //controllerRecipes.addRecipe(name,favorite,time,difficulty,recommended,category,ingredients,process,autor)
+    //    .then(newRecipe=>{
+    //        responsePattern.success(req,res,'Receta añadida correctamente',newRecipe,201)
+    //    })
+    //    .catch(e=>{
+    //        responsePattern.error(req,res,400,e)
+    //    })
 })
 
 router.put('/',validateJWT([]),(req,res)=>{

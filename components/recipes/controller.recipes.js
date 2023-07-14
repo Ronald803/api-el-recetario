@@ -1,10 +1,10 @@
 const storeRecipe       = require('./store.recipes');
 const storeUser        = require('../users/store.users')
-function addRecipe(name,image,favorite,time,difficulty,recommended,category,ingredients,process,autor){
+function addRecipe(name,favorite,time,difficulty,recommended,category,ingredients,process,autor){
     return new Promise(async(resolve,reject)=>{
         const recipe =
             {   
-                name,image,favorite,time,difficulty,recommended,category,ingredients,process,autor
+                name,image:"lalalala",favorite,time,difficulty,recommended,category,ingredients,process,autor
             }
         const recipeSaved = await storeRecipe.add(recipe)
         resolve({
