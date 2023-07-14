@@ -1,10 +1,12 @@
 const storeRecipe       = require('./store.recipes');
 const storeUser        = require('../users/store.users')
-function addRecipe(name,favorite,time,difficulty,recommended,category,ingredients,process,autor){
+function addRecipe(name,favorite,time,difficulty,recommended,category,ingredients,process,autor,files){
     return new Promise(async(resolve,reject)=>{
+        const idImage = await storeRecipe.saveImageToGoogleDrive(files[0])
+        const urlImage = `https://drive.google.com/uc?export=view&id=${idImage}`;    
         const recipe =
             {   
-                name,image:"lalalala",favorite,time,difficulty,recommended,category,ingredients,process,autor
+                name,image:urlImage,favorite,time,difficulty,recommended,category,ingredients,process,autor
             }
         const recipeSaved = await storeRecipe.add(recipe)
         resolve({
